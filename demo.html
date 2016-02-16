@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: #ccc;
+			}
+			.box{
+				width: 400px;
+				height: 560px;
+				margin: 30px auto;
+				position: relative;
+				
+			}
+			.box img{
+				position: absolute;
+				display: block;
+				left: 0;
+				top: 0;
+				width: 400px;
+				height: 560px;
+				filter: blur(10px);
+				-webkit-filter: blur(10px);
+			}
+			#canvas{
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.box div{
+				width: 100px;
+				height: 40px;
+				position: absolute;
+				text-align: center;
+				line-height: 40px;
+				font-size: 16px;
+				color: #fff;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			
+			.box div:nth-of-type(1){
+				left: 60px;
+				bottom: -100px;
+				background: firebrick;
+			}
+			.box div:nth-of-type(2){
+				left: 260px;
+				bottom: -100px;
+				background: darkcyan;
+				
+			}
+			.box div:hover{
+				background: gray;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<img src="img/mm.jpg"/>
+			<canvas id="canvas" width="400" height="560"></canvas>
+			<div id="btn1">重置</div>
+			<div id="btn2">展示</div>
+		</div>
+		<script type="text/javascript">
+			var canvasWidth = 400;
+			var canvasHeight = 560;
+			var canvas = document.querySelector("#canvas");
+			var btn1 = document.querySelector("#btn1");
+			var btn2 = document.querySelector("#btn2");
+			var oGc = canvas.getContext("2d");
+			var clip = { x: 100, y : 100, r : 30 };
+			var objImg = new Image();
+			objImg.src = "img/mm.jpg";
+			objImg.onload = function(){
+				drawImg(objImg,clip);	
+			}
+			function drawImg(oimg,objClip){
+				oGc.clearRect(0,0,canvas.width, canvas.height);
+				
+				oGc.save();
+				toClip(objClip);
+				oGc.drawImage(oimg, 0, 0);
+				oGc.restore();
+			}
+			
+			function toClip(objClip){
+				oGc.beginPath();
+				oGc.arc(objClip.x, objClip.y, objClip.r, 0, Math.PI*2, false);
+				oGc.clip();
+			}
+			btn1.onclick = function(){
+				
+				clip.x = (Math.random()*canvasWidth-2*clip.r)+clip.r;
+				clip.y = (Math.random()*canvasHeight-2*clip.r)+clip.r;
+				drawImg(objImg,clip);
+			}
+			btn2.onclick = function(){
+				var timer = setInterval(function(){
+					
+					clip.r += 10;
+					drawImg(objImg,clip);
+					if(clip.r>=1000){
+						clearInterval(timer)
+					}
+				}, 30)
+				
+			}
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
